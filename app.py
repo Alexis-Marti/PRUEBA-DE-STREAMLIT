@@ -1,11 +1,35 @@
 import streamlit as st
+import mysql.connector
 
-# Título de la aplicación
-st.title('¡Bienvenido a mi aplicación Streamlit!')
+# Conexión
+conn = mysql.connector.connect(
+    host="be5bmntqvmjb45dbc68h-mysql.services.clever-cloud.com",
+    user="ufrsewvahgrdaghy",
+    password="UxDnJbPxibZaLwBC6Xt1",
+    database="ufrsewvahgrdaghy",
+    port=3306
+)
+cursor = conn.cursor()
 
-# Texto de bienvenida
-st.write('Este es un ejemplo básico de cómo usar Streamlit con Python.')
+st.title("Agregar Venta")
 
-# Crear un slider para seleccionar edad
-edad = st.slider('Selecciona tu edad', 0, 100, 25)
-st.write(f'Tu edad es {edad} años.')
+# Formulario
+comprador = st.text_input("Nombre del Comprador")
+edad = st.text_input("Edad")
+telefono = st.number_input("Teléfono", min_value=0, step=1)
+
+if st.button("Agregar Venta"):
+    cursor.execute(
+        "INSERT INTO Venta (Comprador, Edad, Telefono) VALUES (%s, %s, %s)",
+        (comprador, edad, telefono)
+    )
+    conn.commit()
+    st.success("Venta agregada correctamente!")
+
+# Mostrar tabla actualizada
+cursor.execute("SELECT * FROM Venta")
+datos = cursor.fetchall()
+st.table(datos)
+
+cursor.close()
+conn.close()
