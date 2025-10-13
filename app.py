@@ -19,16 +19,17 @@ conn = mysql.connector.connect(
 # Crear un cursor para ejecutar consultas
 cursor = conn.cursor()
 
-# Realizar una consulta en la tabla "venta" (mostrar las primeras 10 filas)
-cursor.execute("SELECT * FROM venta LIMIT 10")
+# Intentar hacer una consulta en la tabla 'Venta' (mostrar las primeras 10 filas)
+cursor.execute("SELECT * FROM Venta LIMIT 10")
 resultados = cursor.fetchall()
 
 # Mostrar los resultados en Streamlit
-st.write("Resultados de la consulta a la tabla 'venta':")
+st.write("Resultados de la consulta a la tabla 'Venta':")
 st.write(resultados)
 
 # Cerrar la conexión y el cursor
 cursor.close()
 conn.close()
+
 
 
