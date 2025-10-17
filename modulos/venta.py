@@ -2,6 +2,6 @@
 import streamlit as st
 
 def mostrar_venta():
-    # Aquí iría la lógica para mostrar las ventas
-    st.title("Ventas")
-    st.write("Aquí se mostrarían los detalles de ventas.")
+    # Aquí se muestra "Hola Mundo"
+    st.title("Hola Mundo")
+    st.write("¡Este es un mensaje de prueba para verificar si la app está funcionando!")
