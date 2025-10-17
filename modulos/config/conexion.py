@@ -3,10 +3,10 @@ import os
 
 def conectar_db():
     # Obtener las credenciales de las variables de entorno (seguridad)
-    host = os.getenv("DB_HOST", "be5bmntqvmjb45dbc68h-mysql.services.clever-cloud.com")
-    user = os.getenv("DB_USER", "ufrsewvahgrdaghy")
-    password = os.getenv("DB_PASSWORD", "UxDnJbPxibZaLwBC6Xt1")
-    database = os.getenv("DB_NAME", "be5bmntqvmjb45dbc68h")
+    host = os.getenv("DB_HOST", "bvn6dva9xsto1mq6ufhl-mysql.services.clever-cloud.com")
+    user = os.getenv("DB_USER", "ukkz6pv0aivbzwu0")
+    password = os.getenv("DB_PASSWORD", "wsEyEErBr88Ac7l3cFkG")
+    database = os.getenv("DB_NAME", "bvn6dva9xsto1mq6ufhl")
 
     # Intentar establecer la conexión
     try:
