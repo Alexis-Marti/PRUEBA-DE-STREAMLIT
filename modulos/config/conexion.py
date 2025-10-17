@@ -1,26 +1,21 @@
 import mysql.connector
-import os
+from mysql.connector import Error
 
-def conectar_db():
-    # Obtener las credenciales de las variables de entorno (seguridad)
-    host = os.getenv("DB_HOST", "bvn6dva9xsto1mq6ufhl-mysql.services.clever-cloud.com")
-    user = os.getenv("DB_USER", "ukkz6pv0aivbzwu0")
-    password = os.getenv("DB_PASSWORD", "wsEyEErBr88Ac7l3cFkG")
-    database = os.getenv("DB_NAME", "bvn6dva9xsto1mq6ufhl")
-
-    # Intentar establecer la conexión
+def obtener_conexion():
     try:
-        conn = mysql.connector.connect(
-            host=host,
-            user=user,
-            password=password,
-            database=database
+        conexion = mysql.connector.connect(
+            host='be5bmntqvmjb45dbc68h-mysql.services.clever-cloud.com',
+            user='ufrsewvahgrdaghy',
+            password='UxDnJbPxibZaLwBC6Xt1',
+            database='be5bmntqvmjb45dbc68h',
+            port=3306
         )
-
-        # Verificar si la conexión fue exitosa
-        if conn.is_connected():
-            return conn
+        if conexion.is_connected():
+            print("✅ Conexión establecida")
+            return conexion
         else:
+            print("❌ Conexión fallida (is_connected = False)")
             return None
-    except mysql.connector.Error as err:
-        return None, f"Error al conectar con la base de datos: {err}"
+    except mysql.connector.Error as e:
+        print(f"❌ Error al conectar: {e}")
+        return None
