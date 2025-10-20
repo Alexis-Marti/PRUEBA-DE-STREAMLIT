@@ -1,7 +1,7 @@
 import streamlit as st
 from modulos.config.conexion import obtener_conexion
 
-def verificar_usuario(usuario, contrasena):
+def verificar_usuario(Usuario, Contra):
     con = obtener_conexion()
     if not con:
         st.error("⚠️ No se pudo conectar a la base de datos.")
@@ -11,7 +11,7 @@ def verificar_usuario(usuario, contrasena):
         cursor = con.cursor()
         # Cambié la tabla a Empleados y las columnas a Usuario y Contra
         query = "SELECT Id_Empleado FROM Empleados WHERE Usuario = %s AND Contra = %s"
-        cursor.execute(query, (usuario, contrasena))
+        cursor.execute(query, (Usuario, Contra))
         result = cursor.fetchone()
         return result[0] if result else None
     finally:
@@ -19,15 +19,15 @@ def verificar_usuario(usuario, contrasena):
 
 def login():
     st.title("Inicio de sesión")
-    usuario = st.text_input("Usuario", key="usuario_input")
-    contrasena = st.text_input("Contraseña", type="password", key="contrasena_input")
+    Usuario = st.text_input("Usuario", key="usuario_input")
+    Contra = st.text_input("Contraseña", type="password", key="contrasena_input")
 
     if st.button("Iniciar sesión"):
-        id_empleado = verificar_usuario(usuario, contrasena)
+        id_empleado = verificar_usuario(Usuario, Contra)
         if id_empleado:
-            st.session_state["usuario"] = usuario
+            st.session_state["usuario"] = Usuario
             st.session_state["id_empleado"] = id_empleado
-            st.success(f"Bienvenido {usuario}")
+            st.success(f"Bienvenido {Usuario}")
             st.rerun()
         else:
             st.error("Credenciales incorrectas")
