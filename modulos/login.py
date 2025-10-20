@@ -10,11 +10,15 @@ def verificar_usuario(usuario, contrasena):
 
     try:
         cursor = con.cursor()
-        # Consulta para verificar si las credenciales son correctas
+        # Mostrar la consulta y parámetros para depuración
         query = "SELECT usuario, contrasena FROM empleado WHERE usuario = %s AND contrasena = %s"
+        st.write(f"Ejecutando consulta: {query} con parámetros: ({usuario}, {contrasena})")
         cursor.execute(query, (usuario, contrasena))
         result = cursor.fetchone()
         return result  # Retorna el registro si existe
+    except mysql.connector.Error as e:
+        st.error(f"❌ Error al ejecutar la consulta: {e}")
+        return None
     finally:
         con.close()
 
