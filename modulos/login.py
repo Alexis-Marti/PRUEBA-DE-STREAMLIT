@@ -28,6 +28,7 @@ def login():
             st.session_state["usuario"] = Usuario
             st.session_state["tipo_usuario"] = Usuario
             st.success(f"Bienvenido ({Usuario})")
+            st.session_state["sesion_iniciada"] = True
             st.rerun()
         else:
             st.error("Credenciales incorrectas")
