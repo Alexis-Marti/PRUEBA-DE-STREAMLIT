@@ -1,5 +1,6 @@
 import streamlit as st
 from modulos.config.conexion import obtener_conexion
+import mysql.connector
 
 # Función para verificar usuario y contraseña
 def verificar_usuario(usuario, contrasena):
@@ -10,17 +11,23 @@ def verificar_usuario(usuario, contrasena):
 
     try:
         cursor = con.cursor()
-        # Mostrar la consulta y parámetros para depuración
         query = "SELECT usuario, contrasena FROM empleado WHERE usuario = %s AND contrasena = %s"
         st.write(f"Ejecutando consulta: {query} con parámetros: ({usuario}, {contrasena})")
         cursor.execute(query, (usuario, contrasena))
         result = cursor.fetchone()
-        return result  # Retorna el registro si existe
+
+        # Si el usuario existe, retorna el resultado
+        return result if result else None
+
     except mysql.connector.Error as e:
-        st.error(f"❌ Error al ejecutar la consulta: {e}")
+        # Agregamos más detalles sobre el error
+        st.error(f"❌ Error de MySQL: {e}")
         return None
+
     finally:
-        con.close()
+        # Aseguramos el cierre de la conexión
+        if con.is_connected():
+            con.close()
 
 # Función de login
 def login():
