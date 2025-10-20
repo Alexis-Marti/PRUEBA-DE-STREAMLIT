@@ -32,7 +32,6 @@ def login():
         tipo = verificar_usuario(Usuario, Contra)
         if tipo:
             st.session_state["usuario"] = Usuario
-            st.session_state["tipo_usuario"] = tipo
             st.success(f"Bienvenido ({Usuario})")
             st.session_state["sesion_iniciada"] = True
             st.rerun()  # Recargar la página para reflejar el estado de la sesión
