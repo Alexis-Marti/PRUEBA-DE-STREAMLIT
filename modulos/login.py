@@ -1,7 +1,6 @@
 import streamlit as st
 from modulos.config.conexion import obtener_conexion
 
-
 def verificar_usuario(usuario, contrasena):
     con = obtener_conexion()
     if not con:
@@ -10,7 +9,8 @@ def verificar_usuario(usuario, contrasena):
 
     try:
         cursor = con.cursor()
-        query = "SELECT Tipo_usuario FROM USUARIO WHERE usuario = %s AND contrasena = %s"
+        # Cambié la tabla a Empleados y las columnas a Usuario y Contra
+        query = "SELECT Id_Empleado FROM Empleados WHERE Usuario = %s AND Contra = %s"
         cursor.execute(query, (usuario, contrasena))
         result = cursor.fetchone()
         return result[0] if result else None
@@ -23,11 +23,12 @@ def login():
     contrasena = st.text_input("Contraseña", type="password", key="contrasena_input")
 
     if st.button("Iniciar sesión"):
-        tipo = verificar_usuario(usuario, contrasena)
-        if tipo:
+        id_empleado = verificar_usuario(usuario, contrasena)
+        if id_empleado:
             st.session_state["usuario"] = usuario
-            st.session_state["tipo_usuario"] = tipo
-            st.success(f"Bienvenido ({tipo})")
+            st.session_state["id_empleado"] = id_empleado
+            st.success(f"Bienvenido {usuario}")
             st.rerun()
         else:
             st.error("Credenciales incorrectas")
+
