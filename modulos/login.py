@@ -51,7 +51,4 @@ def login():
         else:
             st.error("❌ Credenciales incorrectas")
 
-# Llamar la función login para ejecutarlo
-if __name__ == "__main__":
-    login()
 
