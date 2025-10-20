@@ -39,10 +39,10 @@ def login():
     Contra = st.text_input("Contraseña", type="password", key="contrasena_input")
 
     if st.button("Iniciar sesión"):
-        id_empleado = verificar_usuario(Usuario, Contra)
-        if id_empleado:
-            st.session_state["usuario"] = Usuario
-            st.session_state["id_empleado"] = id_empleado
+        Id_Empleado = verificar_usuario(Usuario, Contra)
+        if Id_Empleado:
+            st.session_state["Usuario"] = Usuario
+            st.session_state["Id_Empleado"] = Id_Empleado
             st.success(f"Bienvenido {Usuario}")
             st.rerun()
         else:
