@@ -19,14 +19,14 @@ def verificar_usuario(Usuario, Contra):
 
 def login():
     st.title("Inicio de sesión")
-    Usuario = st.text_input("Usuario", key="usuario_input")
-    Contra = st.text_input("Contraseña", type="password", key="contrasena_input")
+    Usuario = st.text_input("Usuario", key="Usuario_input")
+    Contra = st.text_input("Contraseña", type="password", key="Contra_input")
 
     if st.button("Iniciar sesión"):
         id_empleado = verificar_usuario(Usuario, Contra)
         if id_empleado:
             st.session_state["usuario"] = Usuario
-            st.session_state["id_empleado"] = id_empleado
+            st.session_state["id_empleado"] = Id_empleado
             st.success(f"Bienvenido {Usuario}")
             st.rerun()
         else:
