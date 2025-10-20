@@ -32,7 +32,12 @@ def verificar_usuario(usuario, contrasena):
 # Función de login
 def login():
     st.title("Inicio de sesión")
-    
+
+    # Verificar si la sesión ya está iniciada
+    if "usuario" in st.session_state:
+        st.success(f"Sesión iniciada como {st.session_state['usuario']}")
+        return  # Si ya está logueado, no es necesario continuar
+
     # Entradas de usuario y contraseña
     usuario = st.text_input("Usuario", key="usuario_input")
     contrasena = st.text_input("Contraseña", type="password", key="contrasena_input")
@@ -41,12 +46,13 @@ def login():
     if st.button("Iniciar sesión"):
         # Verificar las credenciales
         usuario_validado = verificar_usuario(usuario, contrasena)
-        
+
         if usuario_validado:
             # Si las credenciales son correctas, guardamos la sesión
             st.session_state["usuario"] = usuario
             st.session_state["tipo_usuario"] = usuario_validado[0]  # Puede ser algún tipo de validación adicional si es necesario
             st.success(f"Bienvenido, {usuario}")
+            st.session_state["sesion_iniciada"] = True  # Indicamos que la sesión está iniciada
             st.rerun()  # Recarga la aplicación para continuar
         else:
             st.error("❌ Credenciales incorrectas")
