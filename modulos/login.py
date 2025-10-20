@@ -1,6 +1,6 @@
 import streamlit as st
 from modulos.config.conexion import obtener_conexion
-from modulos.venta import mostrar_venta
+
 
 def verificar_usuario(usuario, contrasena):
     con = obtener_conexion()
