@@ -29,11 +29,4 @@ def login(usuario, contrasena):
             cursor.close()
             conexion.close()
 
-# Ejemplo de uso
-if __name__ == "__main__":
-    usuario_input = input("Usuario: ")
-    contrasena_input = input("Contraseña: ")
-    if login(usuario_input, contrasena_input):
-        print("Acceso concedido")
-    else:
-        print("Acceso denegado")
+
