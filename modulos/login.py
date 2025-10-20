@@ -1,24 +1,58 @@
+import streamlit as st
+import mysql.connector
+from modulos.config.conexion import obtener_conexion
+
 def verificar_usuario(Usuario, Contra):
-    con = obtener_conexion()
+    # Intentar obtener la conexión a la base de datos
+    con = obtener_conexion()  
     if not con:
         st.error("⚠️ No se pudo conectar a la base de datos.")
         return None
 
     try:
+        # Crear un cursor para ejecutar la consulta SQL
         cursor = con.cursor()
         query = "SELECT * FROM Empleados WHERE Usuario = %s AND Contra = %s"
-        cursor.execute(query, (Usuario, Contra))
-        result = cursor.fetchone()
+        cursor.execute(query, (Usuario, Contra))  # Ejecutar la consulta con los parámetros de entrada
+        result = cursor.fetchone()  # Obtener el primer resultado (si existe)
         
-        if result:  # Si encontramos un resultado
-            return result
+        # Si encontramos un resultado, lo devolvemos
+        if result:
+            return result  # Retorna toda la fila (contiene Id_Empleado, Usuario, Contra, etc.)
         else:
-            return None  # No se encontraron resultados
+            return None  # Si no encontramos nada, devolvemos None
 
     except mysql.connector.Error as err:
+        # Mostrar el error detallado en caso de fallos
         st.error(f"Error al ejecutar la consulta: {err}")
         st.error(f"Consulta SQL: {query}")
         return None
     finally:
+        # Asegurarse de cerrar la conexión después de realizar la consulta
         con.close()
+
+def login():
+    st.title("Inicio de sesión")
+    
+    # Crear los campos de entrada para el nombre de usuario y la contraseña
+    Usuario = st.text_input("Usuario", key="usuario_input")
+    Contra = st.text_input("Contraseña", type="password", key="contrasena_input")
+
+    # Verificar cuando el usuario presiona el botón de "Iniciar sesión"
+    if st.button("Iniciar sesión"):
+        # Verificar el usuario y la contraseña
+        usuario_data = verificar_usuario(Usuario, Contra)
+        
+        if usuario_data:
+            # Extraemos el Id_Empleado (que se encuentra en la primera columna de la tabla)
+            Id_Empleado = usuario_data[0]  # Asumimos que el Id_Empleado es la primera columna en la tabla
+            # Guardamos los datos del usuario en el estado de la sesión
+            st.session_state["usuario"] = Usuario
+            st.session_state["Id_Empleado"] = Id_Empleado
+            st.success(f"Bienvenido, {Usuario} (ID: {Id_Empleado})")
+        else:
+            # Si no encontramos el usuario, mostramos un error
+            st.error("Credenciales incorrectas")
+
+
 
