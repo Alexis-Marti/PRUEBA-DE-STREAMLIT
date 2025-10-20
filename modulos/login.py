@@ -1,9 +1,8 @@
 import streamlit as st
 from modulos.config.conexion import obtener_conexion
-import mysql.connector
 
-# Función para verificar usuario y contraseña
-def verificar_usuario(usuario, contrasena):
+
+def verificar_usuario(Usuario, Contra):
     con = obtener_conexion()
     if not con:
         st.error("⚠️ No se pudo conectar a la base de datos.")
@@ -11,50 +10,25 @@ def verificar_usuario(usuario, contrasena):
 
     try:
         cursor = con.cursor()
-        query = "SELECT usuario, contrasena FROM empleado WHERE usuario = %s AND contrasena = %s"
-        st.write(f"Ejecutando consulta: {query} con parámetros: ({usuario}, {contrasena})")
-        cursor.execute(query, (usuario, contrasena))
+        query = "SELECT Usuario, Contra FROM Empleado WHERE Usuario = %s AND Contra = %s"
+        cursor.execute(query, (Usuario, Contra))
         result = cursor.fetchone()
-
-        # Si el usuario existe, retorna el resultado
-        return result if result else None
-
-    except mysql.connector.Error as e:
-        # Agregamos más detalles sobre el error
-        st.error(f"❌ Error de MySQL: {e}")
-        return None
-
+        return result[0] if result else None
     finally:
-        # Aseguramos el cierre de la conexión
-        if con.is_connected():
-            con.close()
+        con.close()
 
-# Función de login
 def login():
     st.title("Inicio de sesión")
+    Usuario = st.text_input("Usuario", key="usuario_input")
+    Contra= st.text_input("Contraseña", type="password", key="contrasena_input")
 
-    # Verificar si la sesión ya está iniciada
-    if "usuario" in st.session_state:
-        st.success(f"Sesión iniciada como {st.session_state['usuario']}")
-        return  # Si ya está logueado, no es necesario continuar
-
-    # Entradas de usuario y contraseña
-    usuario = st.text_input("Usuario", key="usuario_input")
-    contrasena = st.text_input("Contraseña", type="password", key="contrasena_input")
-
-    # Botón de login
     if st.button("Iniciar sesión"):
-        # Verificar las credenciales
-        usuario_validado = verificar_usuario(usuario, contrasena)
-
-        if usuario_validado:
-            # Si las credenciales son correctas, guardamos la sesión
-            st.session_state["usuario"] = usuario
-            st.session_state["tipo_usuario"] = usuario_validado[0]  # Puede ser algún tipo de validación adicional si es necesario
-            st.success(f"Bienvenido, {usuario}")
-            st.session_state["sesion_iniciada"] = True  # Indicamos que la sesión está iniciada
-            st.rerun()  # Recarga la aplicación para continuar
+        tipo = verificar_usuario(Usuario, Contra)
+        if tipo:
+            st.session_state["usuario"] = Usuario
+            st.session_state["tipo_usuario"] = Usuario
+            st.success(f"Bienvenido ({Usuario})")
+            st.rerun()
         else:
-            st.error("❌ Credenciales incorrectas")
-
+            st.error("Credenciales incorrectas")
 
