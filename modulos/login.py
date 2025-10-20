@@ -12,13 +12,14 @@ def verificar_usuario(Usuario, Contra):
     try:
         # Crear un cursor para ejecutar la consulta SQL
         cursor = con.cursor()
-        query = "SELECT * FROM Empleados WHERE Usuario = %s AND Contra = %s"
+        # Actualizamos la consulta para usar las columnas "usuario" y "contrasena"
+        query = "SELECT * FROM empleado WHERE usuario = %s AND contrasena = %s"
         cursor.execute(query, (Usuario, Contra))  # Ejecutar la consulta con los parámetros de entrada
         result = cursor.fetchone()  # Obtener el primer resultado (si existe)
         
         # Si encontramos un resultado, lo devolvemos
         if result:
-            return result  # Retorna toda la fila (contiene Id_Empleado, Usuario, Contra, etc.)
+            return result  # Retorna toda la fila (contiene id_empleado, usuario, contrasena, etc.)
         else:
             return None  # Si no encontramos nada, devolvemos None
 
@@ -44,15 +45,17 @@ def login():
         usuario_data = verificar_usuario(Usuario, Contra)
         
         if usuario_data:
-            # Extraemos el Id_Empleado (que se encuentra en la primera columna de la tabla)
-            Id_Empleado = usuario_data[0]  # Asumimos que el Id_Empleado es la primera columna en la tabla
+            # Extraemos el id_empleado (que se encuentra en la primera columna de la tabla)
+            Id_Empleado = usuario_data[0]  # Asumimos que el id_empleado es la primera columna en la tabla
             # Guardamos los datos del usuario en el estado de la sesión
             st.session_state["usuario"] = Usuario
-            st.session_state["Id_Empleado"] = Id_Empleado
+            st.session_state["id_empleado"] = Id_Empleado
             st.success(f"Bienvenido, {Usuario} (ID: {Id_Empleado})")
         else:
             # Si no encontramos el usuario, mostramos un error
             st.error("Credenciales incorrectas")
 
-
+if __name__ == "__main__":
+    # Ejecutamos la función login cuando se corre el archivo
+    login()
 
