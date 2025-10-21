@@ -7,10 +7,6 @@ def verificar_usuario(Usuario, Contra):
     if not con:
         st.error("⚠️ No se pudo conectar a la base de datos.")
         return None
-    else:
-        # ✅ Mostrar el mensaje de conexión solo una vez
-        if "conexion_exitosa" not in st.session_state:
-            st.session_state["conexion_exitosa"] = True
 
     try:
         cursor = con.cursor()
@@ -21,13 +17,12 @@ def verificar_usuario(Usuario, Contra):
     finally:
         con.close()
 
-
 def login():
     st.title("Inicio de sesión")
-
-    # 🟢 Mostrar el mensaje de conexión si ya se estableció
+     # Mostrar mensaje persistente de conexión exitosa
     if st.session_state.get("conexion_exitosa"):
         st.success("✅ Conexión a la base de datos establecida correctamente.")
+    
 
     Usuario = st.text_input("Usuario", key="usuario_input")
     Contra = st.text_input("Contraseña", type="password", key="contrasena_input")
@@ -36,10 +31,8 @@ def login():
         tipo = verificar_usuario(Usuario, Contra)
         if tipo:
             st.session_state["usuario"] = Usuario
-            st.success(f"Bienvenido ({Usuario}) 👋")
-            st.session_state["sesion_iniciada"] = True
+            st.success(f"Bienvenido ({Usuario})")
             st.rerun()
         else:
-            st.error("❌ Credenciales incorrectas.")
-
+            st.error("Credenciales incorrectas")
 
