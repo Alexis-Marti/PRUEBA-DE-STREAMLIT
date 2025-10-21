@@ -2,7 +2,7 @@ import streamlit as st
 from modulos.config.conexion import obtener_conexion
 
 
-def verificar_usuario(usuario, contrasena):
+def verificar_usuario(Usuario, Contra):
     con = obtener_conexion()
     if not con:
         st.error("⚠️ No se pudo conectar a la base de datos.")
@@ -10,8 +10,8 @@ def verificar_usuario(usuario, contrasena):
 
     try:
         cursor = con.cursor()
-        query = "SELECT Tipo_usuario FROM USUARIO WHERE usuario = %s AND contrasena = %s"
-        cursor.execute(query, (usuario, contrasena))
+        query = "SELECT Usuario, Contra FROM Empleados WHERE Usuario = %s AND Contra = %s"
+        cursor.execute(query, (Usuario, Contra))
         result = cursor.fetchone()
         return result[0] if result else None
     finally:
@@ -19,15 +19,14 @@ def verificar_usuario(usuario, contrasena):
 
 def login():
     st.title("Inicio de sesión")
-    usuario = st.text_input("Usuario", key="usuario_input")
-    contrasena = st.text_input("Contraseña", type="password", key="contrasena_input")
+    Usuario = st.text_input("Usuario", key="usuario_input")
+    Contra= st.text_input("Contraseña", type="password", key="contrasena_input")
 
     if st.button("Iniciar sesión"):
-        tipo = verificar_usuario(usuario, contrasena)
+        tipo = verificar_usuario(Usuario, Contra)
         if tipo:
-            st.session_state["usuario"] = usuario
-            st.session_state["tipo_usuario"] = tipo
-            st.success(f"Bienvenido ({tipo})")
+            st.session_state["usuario"] = Usuario
+            st.success(f"Bienvenido ({Usuario})")
             st.rerun()
         else:
             st.error("Credenciales incorrectas")
